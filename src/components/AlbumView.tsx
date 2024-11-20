@@ -64,7 +64,7 @@ export const AlbumView: React.FC<{ albums: Album[] }> = ({ albums }) => {
   const handleDecline = () => {
     navigate(-1);
   };
-  if (album.name.toLowerCase() === "extreme" && !hasVerified) {
+  if (album.name.toLowerCase() === "myth" && !hasVerified) {
     return (
       <ContentWarningModal onAccept={handleVerify} onDecline={handleDecline} />
     );
