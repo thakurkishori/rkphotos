@@ -74,7 +74,8 @@ In the timeless lila of Radha-Krishna, every soul can find its reflection. This 
 
 ---
 
-## 🔗 **Explore Now**  
-> 🖼️ Visit **Nikunja Gallery** and lose yourself in this divine digital grove!  
-*(Coming Soon to `rkphotos.pages.dev`)*  
+🔗 [**Explore Now**](https://rkphotos.pages.dev)
+
+🖼️ Visit **Nikunja Gallery** and lose yourself in this divine digital grove!  
+*(Coming Soon to `https://rkphotos.pages.dev`)* 
 
