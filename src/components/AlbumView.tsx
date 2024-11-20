@@ -6,6 +6,7 @@ import { Album, Photo } from "../types";
 import { PhotoViewer } from "./PhotoViewer";
 import { motion } from "framer-motion";
 import { ArrowLeft, Camera } from "lucide-react";
+import { ContentWarningModal } from "./ContentWarningModal";
 
 const PhotoCard: React.FC<{
   photo: Photo;
@@ -47,10 +48,27 @@ export const AlbumView: React.FC<{ albums: Album[] }> = ({ albums }) => {
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(
     null
   );
+  const [hasVerified, setHasVerified] = useState(() => {
+    return localStorage.getItem("myth_album_verified") === "true";
+  });
   const navigate = useNavigate();
   const album = albums.find((a) => a.name === albumName);
 
   if (!album) return <div>Album not found</div>;
+
+  const handleVerify = () => {
+    localStorage.setItem("myth_album_verified", "true");
+    setHasVerified(true);
+  };
+
+  const handleDecline = () => {
+    navigate(-1);
+  };
+  if (album.name.toLowerCase() === "extreme" && !hasVerified) {
+    return (
+      <ContentWarningModal onAccept={handleVerify} onDecline={handleDecline} />
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
