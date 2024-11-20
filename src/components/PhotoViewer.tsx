@@ -89,6 +89,7 @@ export const PhotoViewer: React.FC<PhotoViewerProps> = ({
   );
 
   const handleImageDrag = (e: any, info: PanInfo) => {
+    console.log(e);
     if (scale > 1) {
       setPosition((prev) => ({
         x: prev.x + info.delta.x,
@@ -98,6 +99,7 @@ export const PhotoViewer: React.FC<PhotoViewerProps> = ({
   };
 
   const handleDragEnd = (e: any, info: PanInfo) => {
+    console.log(e);
     setIsDragging(false);
     if (scale === 1) {
       const threshold = 50;
@@ -239,7 +241,7 @@ export const PhotoViewer: React.FC<PhotoViewerProps> = ({
           >
             <img
               src={photos[currentIndex].url}
-              alt={photos[currentIndex].alt || ""}
+              alt={photos[currentIndex].filename || ""}
               className="max-w-full max-h-full object-contain select-none"
               draggable={false}
             />
