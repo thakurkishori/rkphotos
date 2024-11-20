@@ -5,10 +5,12 @@ import { usePhotos } from "./hooks/usePhotos";
 import { AlbumView } from "./components/AlbumView";
 import AlbumThumbnail from "./components/AlbumThumbnail";
 import { AnimatePresence, motion } from "framer-motion";
-import { MenuIcon } from "lucide-react";
+import { InfoIcon, MenuIcon } from "lucide-react";
+import InfoModal from "./components/InfoModal";
 
 const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [menuOpen, setMenuOpen] = React.useState(false);
+  const [infoModelOpen, setInfoModalOpen] = React.useState(false)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
@@ -20,24 +22,36 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
       {/* Header */}
       <header className="top-0 left-0 right-0 z-40 backdrop-blur-md bg-black/30">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <motion.h1
-            className="text-2xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            Nikunja Gallery
-          </motion.h1>
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="lg:hidden p-2 hover:bg-white/10 rounded-full transition-colors"
-          >
-            <MenuIcon size={24} />
-          </button>
-        </div>
-      </header>
+  <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+    <motion.h1
+      className="text-2xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent"
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      Nikunja Gallery
+    </motion.h1>
+    <div className="flex items-center space-x-4">
+      <button
+        onClick={() => setInfoModalOpen(true)} // Toggle modal visibility
+        className="p-2 hover:bg-white/10 rounded-full transition-colors"
+      >
+        <InfoIcon /> <span className="sr-only">Info</span>
+      </button>
+      <button
+        onClick={() => setMenuOpen(!menuOpen)}
+        className="lg:hidden p-2 hover:bg-white/10 rounded-full transition-colors"
+      >
+        <MenuIcon size={24} />
+      </button>
+    </div>
+  </div>
+</header>
 
+<InfoModal
+        isOpen={infoModelOpen}
+        onClose={() => setInfoModalOpen(false)}
+      />
       {/* Main content */}
       <main className="pt-20 relative z-10">{children}</main>
     </div>
