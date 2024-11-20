@@ -18,7 +18,7 @@ export const usePhotos = () => {
           {
             headers: {
               Accept: "application/vnd.github.v3+json",
-              Authorization: `Bearer ${import.meta.env.VITE_GITHUB_TOKEN}`,
+              : `Bearer ${import.meta.env.VITE_GITHUB_TOKEN}`,
               "X-GitHub-Api-Version": "2022-11-28",
             },
           }
@@ -42,3 +42,4 @@ export const usePhotos = () => {
 
   return { albums, loading, error };
 };
+Authorization
