@@ -27,7 +27,7 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            Ethereal Gallery
+            Nikunja Gallery
           </motion.h1>
           <button
             onClick={() => setMenuOpen(!menuOpen)}
