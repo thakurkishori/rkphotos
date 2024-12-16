@@ -1,4 +1,3 @@
-//utils/github.ts
 import {
   BRANCH,
   GITHUB_RAW_URL,
@@ -9,12 +8,12 @@ import { Album, Photo } from "../types";
 
 export const constructGithubUrl = (path: string) =>
   `${GITHUB_RAW_URL}/${REPO_OWNER}/${REPO_NAME}/${BRANCH}/${path}`;
-// `${GITHUB_RAW_URL}/${REPO_NAME}/${REPO_NAME}/${BRANCH}/${path}`; //broken
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const parseGithubTree = (tree: any[]): Album[] => {
   const albums = new Map<string, Photo[]>();
-  console.log({ tree });
+  const allPhotos: Photo[] = [];
+
   tree.forEach((item) => {
     if (!item.path.startsWith("src/photos/")) return;
 
@@ -27,16 +26,28 @@ export const parseGithubTree = (tree: any[]): Album[] => {
     }
 
     if (item.type === "blob" && /\.(jpg|jpeg|png|gif|webp)$/i.test(item.path)) {
-      albums.get(albumName)!.push({
+      const photo: Photo = {
         url: constructGithubUrl(item.path),
         album: albumName,
         filename: parts[parts.length - 1],
-      });
+      };
+
+      albums.get(albumName)!.push(photo);
+      allPhotos.push(photo);
     }
   });
 
-  return Array.from(albums.entries()).map(([name, photos]) => ({
+  // Sort albums individually
+  const sortedAlbums = Array.from(albums.entries()).map(([name, photos]) => ({
     name,
     photos: photos.sort((a, b) => a.filename.localeCompare(b.filename)),
   }));
+
+  // Create "All" album with all photos sorted
+  const allAlbum: Album = {
+    name: "All",
+    photos: allPhotos.sort((a, b) => a.filename.localeCompare(b.filename)),
+  };
+
+  return [allAlbum, ...sortedAlbums];
 };
