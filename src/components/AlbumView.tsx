@@ -1,5 +1,4 @@
-// src/components/AlbumView.tsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useInView } from "react-intersection-observer";
 import { Album, Photo } from "../types";
@@ -7,6 +6,39 @@ import { PhotoViewer } from "./PhotoViewer";
 import { motion } from "framer-motion";
 import { ArrowLeft, Camera } from "lucide-react";
 import { ContentWarningModal } from "./ContentWarningModal";
+
+const ProgressiveImage: React.FC<{
+  src: string;
+  alt: string;
+  className?: string;
+}> = ({ src, alt, className }) => {
+  const [imageSrc, setImageSrc] = useState<string>("");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const image = new Image();
+    image.src = src;
+    image.onload = () => {
+      setImageSrc(src);
+      setLoading(false);
+    };
+  }, [src]);
+
+  return (
+    <div className={`relative ${className}`}>
+      {loading ? (
+        <div className="absolute inset-0 bg-gray-200 animate-pulse" />
+      ) : (
+        <img
+          src={imageSrc}
+          alt={alt}
+          className="w-full h-full object-cover"
+          loading="lazy"
+        />
+      )}
+    </div>
+  );
+};
 
 const PhotoCard: React.FC<{
   photo: Photo;
@@ -24,17 +56,16 @@ const PhotoCard: React.FC<{
       className="aspect-square rounded-xl overflow-hidden cursor-pointer relative group"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: inView ? 1 : 0, y: inView ? 0 : 20 }}
-      transition={{ delay: index * 0.05 }}
+      transition={{ delay: index * 0.1 }}
       whileHover={{ scale: 1.02 }}
       onClick={onClick}
     >
       {inView && (
         <>
-          <img
+          <ProgressiveImage
             src={photo.url}
             alt={photo.filename}
-            className="w-full h-full object-cover"
-            loading="lazy"
+            className="w-full h-full"
           />
           <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity" />
         </>
@@ -64,6 +95,7 @@ export const AlbumView: React.FC<{ albums: Album[] }> = ({ albums }) => {
   const handleDecline = () => {
     navigate(-1);
   };
+
   if (album.name.toLowerCase() === "myth" && !hasVerified) {
     return (
       <ContentWarningModal onAccept={handleVerify} onDecline={handleDecline} />
@@ -91,7 +123,6 @@ export const AlbumView: React.FC<{ albums: Album[] }> = ({ albums }) => {
           </div>
         </div>
       </motion.div>
-
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {album.photos.map((photo, index) => (
           <PhotoCard
@@ -102,7 +133,6 @@ export const AlbumView: React.FC<{ albums: Album[] }> = ({ albums }) => {
           />
         ))}
       </div>
-
       {selectedPhotoIndex !== null && (
         <PhotoViewer
           photos={album.photos}
